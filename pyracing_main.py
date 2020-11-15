@@ -37,7 +37,7 @@ class Car:
 
     def check_out_of_screen(self):
         if self.x+self.width > WINDOW_WIDTH or self.x < 0:
-        self.x -= self.dx
+            self.x -= self.dx
                                                           
     def check_crash(self, car):
         if (self.x + self.width > car.x) and (self.x < car.x) and (self.y < car.y+car.height) and (self.y + self.height > car.y):
