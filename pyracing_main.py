@@ -25,7 +25,7 @@ class Car:
     def load_image(self):
         self.image = pg.image.load(random.choice(self.image_car))
         self.width = self.image.get_rect().size[0]
-        self.height = self.image.get_rext().size[1]
+        self.height = self.image.get_rect().size[1]
 
     def draw_image(self):
         screen.blit(self.image, [self.x, self.y])
@@ -47,7 +47,7 @@ class Car:
 
 #메인 메뉴 설계
 def draw_main_menu():
-    draw_x = (WINDWO_WIDTH / 2) - 200
+    draw_x = (WINDOW_WIDTH / 2) - 200
     draw_y = WINDOW_HEIGHT / 2
     image_intro = pg.image.load('PyCar.png')
     screen.blit(image_intro, [draw_x, draw_y])
@@ -69,13 +69,13 @@ def draw_score():
 
 
 if __name__ == '__main__':
-    pygame.init()
+    pg.init()
     screen = pg.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-    pygame.display.set_caption("PyRacing")
+    pg.display.set_caption("PyRacing")
     clock = pg.time.Clock()
 
-    pygame.mixer.music.load('race.wav')
-    sound_crach = pg.mixer.Sound('carsh.wav')
+    pg.mixer.music.load('race.wav')
+    sound_crash = pg.mixer.Sound('crash.wav')
     sound_engine = pg.mixer.Sound('engine.wav')
 
     player = Car(WINDOW_WIDTH/2, (WINDOW_HEIGHT - 150), 0, 0)
@@ -102,46 +102,46 @@ if __name__ == '__main__':
         lanes.append([lane_x, lane_y])
         lane_y += lane_height + lane_margin
  
-score = 0
-crash = True
-game_on = True
+    score = 0
+    crash = True
+    game_on = True
 
-while game_on:                                              #메인 게임, 충돌 구현
-    for event in pg.event.get():
-        if event.type == pg.QUIT:
-            game_on = False
+    while game_on:                                              #메인 게임, 충돌 구현
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                game_on = False
 
-        if crash:
-            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                crash = False
-                for i in range(car_count):
-                    cars[i].x = random.randrange(0, WINDOW_WIDTH-cars[i].width)
-                    car[i].y = random.randrange(-150, -50)
-                    cars[i].load_image()
+            if crash:
+                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    crash = False
+                    for i in range(car_count):
+                        cars[i].x = random.randrange(0, WINDOW_WIDTH-cars[i].width)
+                        car[i].y = random.randrange(-150, -50)
+                        cars[i].load_image()
 
-                player.load_image()
-                player.x = WINDOW_WIDTH / 2
-                player.dx = 0
-                score = 0
-                pg.mouse.set_visible(False)
-                sound_engine.play()
-                sleep(5)
-                pg.mixer.music.play(-1)
-
-        if not crash:
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_RIGHT:
-                    player.dx = 4
-                elif event.key == pygame.K_LEFT:
-                    player.dx = -4
-
-            if event.type == pg.KEYUP:
-                if event.key == pg.K_RIGHT:
+                    player.load_image()
+                    player.x = WINDOW_WIDTH / 2
                     player.dx = 0
-                elif event,key == pg.K_LEFT:
-                    player.cd = 0
+                    score = 0
+                    pg.mouse.set_visible(False)
+                    sound_engine.play()
+                    sleep(5)
+                    pg.mixer.music.play(-1)
+
+            if not crash:
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_RIGHT:
+                        player.dx = 4
+                    elif event.key == pg.K_LEFT:
+                        player.dx = -4
+
+                if event.type == pg.KEYUP:
+                    if event.key == pg.K_RIGHT:
+                        player.dx = 0
+                    elif event.key == pg.K_LEFT:
+                        player.cd = 0
  
-        screen.fill.GRAY
+        screen.fill(GRAY)
         if not crash:
         
             for i in range(lane_count):
@@ -162,18 +162,18 @@ while game_on:                                              #메인 게임, 충�
                 if cars[i].y > WINDOW_HEIGHT:
                     score += 10
                     cars[i].x = random.randrange(0, WINDOW_WIDTH-cars[i].width)
-                    car[i].y = random.randrange(-150, -50)  
+                    cars[i].y = random.randrange(-150, -50)  
                     cars[i].dy = random.randrange(5, 10)                                        
                     cars[i].load_image()
                                                         
 
                     
-            for i in range(car_counnt):
+            for i in range(car_count):
                 if player.check_crash(cars[i]):    
                     crash = True
                     pg.mixer.music.stop()
                     sound_crash.play()
-                    sleep()
+                    sleep(2)
                     pg.mouse.set_visible(True)
                     break
 
