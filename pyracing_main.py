@@ -116,7 +116,7 @@ if __name__ == '__main__':
                     crash = False
                     for i in range(car_count):
                         cars[i].x = random.randrange(0, WINDOW_WIDTH-cars[i].width)
-                        car[i].y = random.randrange(-150, -50)
+                        cars[i].y = random.randrange(-150, -50)
                         cars[i].load_image()
 
                     player.load_image()
