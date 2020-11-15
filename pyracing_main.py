@@ -78,7 +78,7 @@ if __name__ == '__main__':
     sound_crach = pg.mixer.Sound('carsh.wav')
     sound_engine = pg.mixer.Sound('engine.wav')
 
-                                                                                                                                                                                                                                            player = Car(WINDOW_WIDTH/2), (WINDOW_HEIGHT - 150), 0, 0)
+    player = Car(WINDOW_WIDTH/2, (WINDOW_HEIGHT - 150), 0, 0)
     player.load_image()
 
     cars = []
@@ -132,7 +132,7 @@ while game_on:                                              #메인 게임, 충�
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_RIGHT:
                     player.dx = 4
-                elif event,key == pygame.K_LEFT:
+                elif event.key == pygame.K_LEFT:
                     player.dx = -4
 
             if event.type == pg.KEYUP:
@@ -141,12 +141,12 @@ while game_on:                                              #메인 게임, 충�
                 elif event,key == pg.K_LEFT:
                     player.cd = 0
  
-        screen.fill.(GRAY)
+        screen.fill.GRAY
         if not crash:
         
             for i in range(lane_count):
             
-                pg.draw.rect(screen, WHITE, [lanes[i][0], lanes[i][1], lane_width, lane_height]
+                pg.draw.rect(screen, WHITE, [lanes[i][0], lanes[i][1], lane_width, lane_height])
                 lanes[i][1] += 10
                 if lanes[i][1] > WINDOW_HEIGHT:                              
                     lanes[i][1] = -40 - lane_height
