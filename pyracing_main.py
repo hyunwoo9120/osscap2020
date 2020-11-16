@@ -13,7 +13,7 @@ RED = (255, 0, 0)
 
 #자동차 객체 생성
 class Car:
-        image_car = ['RacingCar01.png','RacingCar02.png','RacingCar03.png','RacingCar04.png','RacingCar05.png','RacingCar06.png','RacingCar07.png','RacingCar08.png','RacingCar09.png','RacingCar10.png','RacingCar11.png','RacingCar12.png','RacingCar13.png','RacingCar14.png','RacingCar15.png','RacingCar16.png','RacingCar17.png','RacingCar18.png','RacingCar19.png','RacingCar20.png']
+    image_car = ['RacingCar01.png','RacingCar02.png','RacingCar03.png','RacingCar04.png','RacingCar05.png','RacingCar06.png','RacingCar07.png','RacingCar08.png','RacingCar09.png','RacingCar10.png','RacingCar11.png','RacingCar12.png','RacingCar13.png','RacingCar14.png','RacingCar15.png','RacingCar16.png','RacingCar17.png','RacingCar18.png','RacingCar19.png','RacingCar20.png']
 
     def __init__(self, x=0, y=0, dx=0, dy=0):
         self.image = ""
@@ -37,7 +37,7 @@ class Car:
 
     def check_out_of_screen(self):
         if self.x+self.width > WINDOW_WIDTH or self.x < 0:
-        self.x -= self.dx
+            self.x -= self.dx
                                                           
     def check_crash(self, car):
         if (self.x + self.width > car.x) and (self.x < car.x) and (self.y < car.y+car.height) and (self.y + self.height > car.y):
@@ -69,16 +69,16 @@ def draw_score():
 
 
 if __name__ == '__main__':
-    pygame.init()
+    pg.init()
     screen = pg.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-    pygame.display.set_caption("PyRacing")
+    pg.display.set_caption("PyRacing")
     clock = pg.time.Clock()
 
-    pygame.mixer.music.load('race.wav')
+    pg.mixer.music.load('race.wav')
     sound_crach = pg.mixer.Sound('carsh.wav')
     sound_engine = pg.mixer.Sound('engine.wav')
 
-                                                                                                                                                                                                                                            player = Car(WINDOW_WIDTH/2), (WINDOW_HEIGHT - 150), 0, 0)
+    player = Car(WINDOW_WIDTH/2, (WINDOW_HEIGHT - 150), 0, 0)
     player.load_image()
 
     cars = []
@@ -132,21 +132,21 @@ while game_on:                                              #메인 게임, 충�
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_RIGHT:
                     player.dx = 4
-                elif event,key == pygame.K_LEFT:
+                elif event.key == pygame.K_LEFT:
                     player.dx = -4
 
             if event.type == pg.KEYUP:
                 if event.key == pg.K_RIGHT:
                     player.dx = 0
-                elif event,key == pg.K_LEFT:
+                elif event.key == pg.K_LEFT:
                     player.cd = 0
  
-        screen.fill.(GRAY)
+        screen.fill(GRAY)
         if not crash:
         
             for i in range(lane_count):
             
-                pg.draw.rect(screen, WHITE, [lanes[i][0], lanes[i][1], lane_width, lane_height]
+                pg.draw.rect(screen, WHITE, [lanes[i][0], lanes[i][1], lane_width, lane_height])
                 lanes[i][1] += 10
                 if lanes[i][1] > WINDOW_HEIGHT:                              
                     lanes[i][1] = -40 - lane_height
@@ -173,7 +173,7 @@ while game_on:                                              #메인 게임, 충�
                     crash = True
                     pg.mixer.music.stop()
                     sound_crash.play()
-                    sleep()
+                    sleep(2)
                     pg.mouse.set_visible(True)
                     break
 
