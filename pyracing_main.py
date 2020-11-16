@@ -13,7 +13,26 @@ RED = (255, 0, 0)
 
 #자동차 객체 생성
 class Car:
-    image_car = ['RacingCar01.png','RacingCar02.png','RacingCar03.png','RacingCar04.png','RacingCar05.png','RacingCar06.png','RacingCar07.png','RacingCar08.png','RacingCar09.png','RacingCar10.png','RacingCar11.png','RacingCar12.png','RacingCar13.png','RacingCar14.png','RacingCar15.png','RacingCar16.png','RacingCar17.png','RacingCar18.png','RacingCar19.png','RacingCar20.png']
+    image_car = ['./res/RacingCar01.png',
+                 './res/RacingCar02.png',
+                 './res/RacingCar03.png',
+                 './res/RacingCar04.png',
+                 './res/RacingCar05.png',
+                 './res/RacingCar06.png',
+                 './res/RacingCar07.png',
+                 './res/RacingCar08.png',
+                 './res/RacingCar09.png',
+                 './res/RacingCar10.png',
+                 './res/RacingCar11.png',
+                 './res/RacingCar12.png',
+                 './res/RacingCar13.png',
+                 './res/RacingCar14.png',
+                 './res/RacingCar15.png',
+                 './res/RacingCar16.png',
+                 './res/RacingCar17.png',
+                 './res/RacingCar18.png',
+                 './res/RacingCar19.png',
+                 './res/RacingCar20.png']
 
     def __init__(self, x=0, y=0, dx=0, dy=0):
         self.image = ""
@@ -49,7 +68,7 @@ class Car:
 def draw_main_menu():
     draw_x = (WINDOW_WIDTH / 2) - 200
     draw_y = WINDOW_HEIGHT / 2
-    image_intro = pg.image.load('PyCar.png')
+    image_intro = pg.image.load('./res/PyCar.png')
     screen.blit(image_intro, [draw_x, draw_y])
     font_40 = pg.font.SysFont("FixedSys", 40, True, False)
     font_30 = pg.font.SysFont("FixedSys", 30, True, False)
@@ -74,9 +93,9 @@ if __name__ == '__main__':
     pg.display.set_caption("PyRacing")
     clock = pg.time.Clock()
 
-    pg.mixer.music.load('race.wav')
-    sound_crash = pg.mixer.Sound('crash.wav')
-    sound_engine = pg.mixer.Sound('engine.wav')
+    pg.mixer.music.load('./snd/race.wav')
+    sound_crash = pg.mixer.Sound('./snd/crash.wav')
+    sound_engine = pg.mixer.Sound('./snd/engine.wav')
 
     player = Car(WINDOW_WIDTH/2, (WINDOW_HEIGHT - 150), 0, 0)
     player.load_image()
