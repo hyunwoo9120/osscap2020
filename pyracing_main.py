@@ -9,6 +9,8 @@ BLACK = (0,0,0)
 WHITE = (255,255,255)
 GRAY = (150, 150, 150)
 RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+GREEN = (0, 255, 0)
 
 
 class Car:
@@ -155,7 +157,7 @@ if __name__ == '__main__':
                     if event.key == pg.K_RIGHT:
                         player.dx = 0
                     elif event.key == pg.K_LEFT:
-                        player.cd = 0
+                        player.dx = 0
  
         screen.fill(GRAY)
         if not crash:
