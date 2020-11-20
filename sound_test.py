@@ -8,11 +8,11 @@ pygame.mixer.init()
 
   
 
-crash = pygame.mixer.Sound("crash.wav")
+crash = pygame.mixer.Sound("./snd/crash.wav")
 
-engine = pygame.mixer.Sound("engine.wav")
+engine = pygame.mixer.Sound("./snd/engine.wav")
 
-race = pygame.mixer.Sound("race.wav")
+race = pygame.mixer.Sound("./snd/race.wav")
 
    
 

@@ -3,9 +3,9 @@ import time
 
 pg.mixer.init()
 
-crash = pg.mixer.Sound("crash.wav")
-engine = pg.mixer.Sound("engine.wav")
-race = pg.mixer.Sound("race.wav")
+crash = pg.mixer.Sound("./snd/crash.wav")
+engine = pg.mixer.Sound("./snd/engine.wav")
+race = pg.mixer.Sound("./snd/race.wav")
 
 race.play()
 
