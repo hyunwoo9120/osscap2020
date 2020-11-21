@@ -95,7 +95,7 @@ def set_pixel(x, y, color):
     screen[y][x] = color
 
 # 0: Black      1: Red      2: Green    3: Yellow
-# 4: Blue       5: Mint     6: Pink     7: White
+# 4: Blue       5: Pink     6: Mint     7: White
 
 # timer
 fill_rectangle(0, 0, 5, 16, 1) 
@@ -117,6 +117,12 @@ fill_rectangle(27, 10, 32, 11, 3)
 # right line
 fill_rectangle(7, 15, 32, 16, 3) 
 
+# car 4x6
+# fill_rectangle(10, 11, 16, 15, 5) 
+# car 3x5
+# fill_rectangle(10, 7, 15, 10, 2) 
+# car 3x4 vv
+fill_rectangle(10, 1, 14, 4, 6) 
 
 
 while True:
