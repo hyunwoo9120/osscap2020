@@ -14,7 +14,7 @@ def LED_init():
 
 def draw_matrix(m):
     array = m.get_array()
-    for y in range(m.get_dy()):
+    for y in range(m.get_dy()-4):
         for x in range(3, m.get_dx()-3):
             if array[y][x] == 0:
                 # print("□ ", end='')
@@ -31,11 +31,13 @@ def draw_matrix(m):
             elif array[y][x] ==  7:
                 # print("X ", end='')
                 LMD.set_pixel(y, 18-x, 1)
+            elif array[y][x] ==  8:
+                # print("X ", end='')
+                LMD.set_pixel(y, 18-x, 5)
             else:
                 # print("■ ", end='')
                 LMD.set_pixel(y, 18-x, 4)
-        print()
-    time.sleep(0.06)
+    time.sleep(0.05)
 
 def num_matrix(number):
     if number == 0:
@@ -59,12 +61,21 @@ def num_matrix(number):
     elif number == 9:
         return nine
 
+def random_car():
+    randNum = random.randrange(4,6)
+    if randNum==4:
+        randNum = random.randrange(4, 15, 5)
+    elif randNum==5:
+        randNum = random.randrange(5, 16, 5)
+    return randNum
 ### integer variables: must always be integer!
 iScreenDy = 32
 iScreenDx = 16
 iScreenDw = 3
-top = 27
-left = iScreenDw + iScreenDx//2 - 2
+mytop = 27
+myleft = iScreenDw + iScreenDx//2 - 2
+obstop = 7
+obsleft = random_car()
 newCarNeeded = False
 
 arrayMap = [
@@ -104,7 +115,11 @@ arrayMap = [
             [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
             [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
             [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2]]
+            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
 zero = [[0, 7, 7, 7],
         [0, 7, 0, 7],
@@ -162,21 +177,27 @@ tens = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 hunds = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 thnds = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
-myCar = [[0, 3, 3, 3],
-         [0, 3, 3, 3],
-         [0, 3, 3, 3],
-         [0, 3, 3, 3]]
+myCar = [[3, 3, 3],
+         [3, 3, 3],
+         [3, 3, 3],
+         [3, 3, 3]]
 
-obstCar = [[0, 3, 3, 3],
-           [0, 3, 3, 3],
-           [0, 3, 3, 3],
-           [0, 3, 3, 3]]
+obstCar = [[8, 8, 8],
+           [8, 8, 8],
+           [8, 8, 8],
+           [8, 8, 8]]
 
 iScreen = Matrix(arrayMap)
 oScreen = Matrix(iScreen)
+
 currBlk = Matrix(myCar)
-tempBlk = iScreen.clip(top, left, top+currBlk.get_dy(), left+currBlk.get_dx())
+tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
 tempBlk = tempBlk + currBlk
+tempBlk.print()
+
+obstBlk = Matrix(obstCar)
+tempOBlk = iScreen.clip(obstop, obsleft, obstop+obstBlk.get_dy(), obsleft+obstBlk.get_dx())
+tempOBlk = tempOBlk + obstBlk
 
 ones = zero
 tens = zero
@@ -187,7 +208,9 @@ oScreen.paste(Matrix(thnds),0,2)
 oScreen.paste(Matrix(hunds),0,6)
 oScreen.paste(Matrix(tens),0,11)
 oScreen.paste(Matrix(ones),0,15)
-oScreen.paste(tempBlk, top, left)
+
+oScreen.paste(tempOBlk, obstop, obsleft)
+oScreen.paste(tempBlk, mytop, myleft)
 LED_init()
 draw_matrix(oScreen)
 print()
@@ -195,6 +218,7 @@ print()
 start = timeit.default_timer()
 
 while True:
+    currBlk.print()
     now = timeit.default_timer()
     score = round(now-start, 1)*10
 
@@ -204,66 +228,85 @@ while True:
     ones = num_matrix(int(score % 10))
 
     oScreen = Matrix(iScreen)
+    oScreen.paste(tempBlk, mytop, myleft)
 
-    # key = input('Enter a key from [ q (quit), a (left), d (right) : ')
     if keyboard.is_pressed('q'):
         key = 'q'
         print('Game terminated...')
         break
     elif keyboard.is_pressed('a'):    # move left
         key = 'a'
-        left -= 1
+        myleft -= 1
     elif keyboard.is_pressed('d'):    # move right
         key = 'd'
-        left += 1
-    # else:               # wrong key
-    #     print('Wrong key...')
+        myleft += 1
+    else:
+        key = ' '
 
-    tempBlk = iScreen.clip(top, left, top+currBlk.get_dy(), left+currBlk.get_dx())
+    tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
     tempBlk = tempBlk + currBlk
-    if tempBlk.anyGreaterThan(4): # 5 이상
+    tempBlk.print()
+    if tempBlk.equal(5): # 양쪽 차선과 내 자동차가 부딪힌 경우
         if key == 'a': # undo: move right
-            left += 1
+            myleft += 1
         elif key == 'd': # undo: move left
-            left -= 1
-
-        tempBlk = iScreen.clip(top, left, top+currBlk.get_dy(), left+currBlk.get_dx())
+            myleft -= 1
+    
+        tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
         tempBlk = tempBlk + currBlk
+        oScreen.paste(tempBlk, mytop, myleft)
+    
+    tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
+    tempBlk = tempBlk + currBlk
+    tempBlk.print()
+    if tempBlk.anyGreaterThan(6):
+        currBlk.print()
+        print('!!! Game Over !!!')
+        print('Score: {0}'.format(score))
+        break
 
     oScreen = Matrix(iScreen)
     oScreen.paste(Matrix(thnds),0,2)
     oScreen.paste(Matrix(hunds),0,6)
     oScreen.paste(Matrix(tens),0,11)
     oScreen.paste(Matrix(ones),0,15)
-    oScreen.paste(tempBlk, top, left)
+    oScreen.paste(tempBlk, mytop, myleft)
+    oScreen.paste(tempOBlk, obstop, obsleft)
+    
     draw_matrix(oScreen)
-    print()
+    if obstop <32:
+        obstop+=1
+    else:
+        obsleft = random_car()
+        newCarNeeded = True
 
-    print(score)
-    print(score)
     # ~999.9 secs ( about 16 mins )
     if(score == 9999):
         print("!! You WIN !!")
         break
 
     if newCarNeeded:
-        iScreen = Matrix(oScreen)
-        top = 0
-        left = iScreenDw + iScreenDx//2 - 2
+        jScreen = Matrix(oScreen)
+        obstop = 7
         newCarNeeded = False
         currBlk = Matrix(myCar)
-        tempBlk = iScreen.clip(top, left, top+currBlk.get_dy(), left+currBlk.get_dx())
+        tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
         tempBlk = tempBlk + currBlk
-        if tempBlk.anyGreaterThan(6):
+
+        obstBlk = Matrix(obstCar)
+        tempOBlk = iScreen.clip(obstop, obsleft, obstop+obstBlk.get_dy(), obsleft+obstBlk.get_dx())
+        tempOBlk = tempOBlk + obstBlk
+        
+        if currBlk.anyGreaterThan(6):
+            # currBlk.print()
             print('!!! Game Over !!!')
             print('Score: {0}'.format(score))
             break
         
-        oScreen = Matrix(iScreen)
-        oScreen.paste(tempBlk, top, left)
-        oScreen.paste(Matrix(thnds),0,3)
+        oScreen = Matrix(jScreen)
+        # oScreen.paste(tempBlk, mytop, myleft)
         draw_matrix(oScreen)
-        print()
+        
 ###
 ### end of the loop
 ###
