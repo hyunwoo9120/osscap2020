@@ -17,27 +17,20 @@ def draw_matrix(m):
     for y in range(m.get_dy()-4):
         for x in range(3, m.get_dx()-3):
             if array[y][x] == 0:
-                # print("□ ", end='')
                 LMD.set_pixel(y, 18-x, 0)
             elif array[y][x] == 1:
-                # print("■ ", end='')
                 LMD.set_pixel(y, 18-x, 3)
             elif array[y][x] == 2:
-                # print("■ ", end='')
                 LMD.set_pixel(y, 18-x, 3)
             elif array[y][x] == 3:
-                # print("■ ", end='')
                 LMD.set_pixel(y, 18-x, 4)
             elif array[y][x] ==  7:
-                # print("X ", end='')
                 LMD.set_pixel(y, 18-x, 1)
             elif array[y][x] ==  8:
-                # print("X ", end='')
                 LMD.set_pixel(y, 18-x, 5)
             else:
-                # print("■ ", end='')
                 LMD.set_pixel(y, 18-x, 4)
-    time.sleep(0.05)
+    time.sleep(0.04)
 
 def num_matrix(number):
     if number == 0:
@@ -68,15 +61,19 @@ def random_car():
     elif randNum==5:
         randNum = random.randrange(5, 16, 5)
     return randNum
+
+def newcar_time(currTime):
+    randomTime = random.random()+0.2
+    checkTime = currTime + randomTime
+    return checkTime
+
 ### integer variables: must always be integer!
 iScreenDy = 32
 iScreenDx = 16
 iScreenDw = 3
 mytop = 27
 myleft = iScreenDw + iScreenDx//2 - 2
-obstop = 7
-obsleft = random_car()
-newCarNeeded = False
+newCarNeeded = True
 
 arrayMap = [
             #0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21
@@ -193,11 +190,11 @@ oScreen = Matrix(iScreen)
 currBlk = Matrix(myCar)
 tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
 tempBlk = tempBlk + currBlk
-tempBlk.print()
 
-obstBlk = Matrix(obstCar)
-tempOBlk = iScreen.clip(obstop, obsleft, obstop+obstBlk.get_dy(), obsleft+obstBlk.get_dx())
-tempOBlk = tempOBlk + obstBlk
+car1 = Matrix(obstCar)
+car2 = Matrix(obstCar)
+car3 = Matrix(obstCar)
+car4 = Matrix(obstCar)
 
 ones = zero
 tens = zero
@@ -209,16 +206,15 @@ oScreen.paste(Matrix(hunds),0,6)
 oScreen.paste(Matrix(tens),0,11)
 oScreen.paste(Matrix(ones),0,15)
 
-oScreen.paste(tempOBlk, obstop, obsleft)
 oScreen.paste(tempBlk, mytop, myleft)
 LED_init()
 draw_matrix(oScreen)
 print()
 
 start = timeit.default_timer()
-
+check = 0
 while True:
-    currBlk.print()
+    time.sleep(0.01)
     now = timeit.default_timer()
     score = round(now-start, 1)*10
 
@@ -227,9 +223,76 @@ while True:
     tens = num_matrix(int((score - ((score // 1000)*1000) - ((score - ((score // 1000)*1000)) // 100*100)) // 10))
     ones = num_matrix(int(score % 10))
 
+    if(car1.state):
+        car1Blk = iScreen.clip(car1.top, car1.left, car1.top+car1.get_dy(), car1.left+car1.get_dx()) + car1
+        oScreen.paste(car1Blk, car1.top, car1.left)
+    if(car2.state):
+        car2Blk = iScreen.clip(car2.top, car2.left, car2.top+car2.get_dy(), car2.left+car2.get_dx()) + car2
+        oScreen.paste(car2Blk, car2.top, car2.left)
+    if(car3.state):
+        car3Blk = iScreen.clip(car3.top, car3.left, car3.top+car3.get_dy(), car3.left+car3.get_dx()) + car3
+        oScreen.paste(car3Blk, car3.top, car3.left)
+    if(car4.state):
+        car4Blk = iScreen.clip(car4.top, car4.left, car4.top+car4.get_dy(), car4.left+car4.get_dx()) + car4
+        oScreen.paste(car4Blk, car4.top, car4.left)
+
     oScreen = Matrix(iScreen)
     oScreen.paste(tempBlk, mytop, myleft)
+    if now > check:
+        newCarNeeded=True
+    else:
+        newCarNeeded=False
 
+    if newCarNeeded:
+        print("newCarNeeded")
+        check = newcar_time(now)
+        oScreen.paste(Matrix(thnds),0,2)
+        oScreen.paste(Matrix(hunds),0,6)
+        oScreen.paste(Matrix(tens),0,11)
+        oScreen.paste(Matrix(ones),0,15)
+        newCarNeeded = False
+        jScreen = Matrix(oScreen)
+        obstop = 7
+        obsleft = random_car()
+
+        currBlk = Matrix(myCar)
+        tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
+        tempBlk = tempBlk + currBlk
+
+        if(not car1.state):
+            car1.set_top(obstop)
+            car1.set_left(obsleft)
+            car1.set_true()
+            car1Blk = iScreen.clip(car1.top, car1.left, car1.top+car1.get_dy(), car1.left+car1.get_dx()) + car1
+        
+        elif(not car2.state):
+            car2.set_top(obstop)
+            car2.set_left(obsleft)
+            car2.set_true()
+            car2Blk = iScreen.clip(car2.top, car2.left, car2.top+car2.get_dy(), car2.left+car2.get_dx()) + car2
+        
+        elif(not car3.state):
+            car3.set_top(obstop)
+            car3.set_left(obsleft)
+            car3.set_true()
+            car3Blk = iScreen.clip(car3.top, car3.left, car3.top+car3.get_dy(), car3.left+car3.get_dx()) + car3
+
+        elif(not car4.state):
+            car4.set_top(obstop)
+            car4.set_left(obsleft)
+            car4.set_true()
+            car4Blk = iScreen.clip(car4.top, car4.left, car4.top+car4.get_dy(), car4.left+car4.get_dx()) + car4
+        
+        oScreen = Matrix(jScreen)
+        if(car1.state):
+            oScreen.paste(car1Blk, car1.top, car1.left)
+        if(car2.state):
+            oScreen.paste(car2Blk, car2.top, car2.left)
+        if(car3.state):
+            oScreen.paste(car3Blk, car3.top, car3.left)
+        if(car4.state):
+            oScreen.paste(car4Blk, car4.top, car4.left)
+    
     if keyboard.is_pressed('q'):
         key = 'q'
         print('Game terminated...')
@@ -245,7 +308,7 @@ while True:
 
     tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
     tempBlk = tempBlk + currBlk
-    tempBlk.print()
+
     if tempBlk.equal(5): # 양쪽 차선과 내 자동차가 부딪힌 경우
         if key == 'a': # undo: move right
             myleft += 1
@@ -259,11 +322,8 @@ while True:
     tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
     tempBlk = tempBlk + currBlk
     tempBlk.print()
-    if tempBlk.anyGreaterThan(6):
-        currBlk.print()
-        print('!!! Game Over !!!')
-        print('Score: {0}'.format(score))
-        break
+
+    # TODO: 충돌처리!!
 
     oScreen = Matrix(iScreen)
     oScreen.paste(Matrix(thnds),0,2)
@@ -271,41 +331,45 @@ while True:
     oScreen.paste(Matrix(tens),0,11)
     oScreen.paste(Matrix(ones),0,15)
     oScreen.paste(tempBlk, mytop, myleft)
-    oScreen.paste(tempOBlk, obstop, obsleft)
-    
-    draw_matrix(oScreen)
-    if obstop <32:
-        obstop+=1
-    else:
-        obsleft = random_car()
-        newCarNeeded = True
 
-    # ~999.9 secs ( about 16 mins )
+    if(car1.state):
+        if car1.top<32:
+            car1.top+=1
+        else:
+            car1.set_false()
+    if(car2.state):
+        if car2.top<32:
+            car2.top+=1
+        else:
+            car2.set_false()
+    if(car3.state):
+        if car3.top<32:
+            car3.top+=1
+        else:
+            car3.set_false()
+    if(car4.state):
+        if car4.top<32:
+            car4.top+=1
+        else:
+            car4.set_false()
+
+    if(car1.state):
+            oScreen.paste(car1Blk, car1.top, car1.left)
+    if(car2.state):
+            oScreen.paste(car2Blk, car2.top, car2.left)
+    if(car3.state):
+            oScreen.paste(car3Blk, car3.top, car3.left)
+    if(car4.state):
+            oScreen.paste(car4Blk, car4.top, car4.left)
+    draw_matrix(oScreen)
+
+    # 호옥시라도 점수가 9999가 된다면....
     if(score == 9999):
         print("!! You WIN !!")
         break
 
-    if newCarNeeded:
-        jScreen = Matrix(oScreen)
-        obstop = 7
-        newCarNeeded = False
-        currBlk = Matrix(myCar)
-        tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
-        tempBlk = tempBlk + currBlk
-
-        obstBlk = Matrix(obstCar)
-        tempOBlk = iScreen.clip(obstop, obsleft, obstop+obstBlk.get_dy(), obsleft+obstBlk.get_dx())
-        tempOBlk = tempOBlk + obstBlk
-        
-        if currBlk.anyGreaterThan(6):
-            # currBlk.print()
-            print('!!! Game Over !!!')
-            print('Score: {0}'.format(score))
-            break
-        
-        oScreen = Matrix(jScreen)
-        # oScreen.paste(tempBlk, mytop, myleft)
-        draw_matrix(oScreen)
+    
+    
         
 ###
 ### end of the loop

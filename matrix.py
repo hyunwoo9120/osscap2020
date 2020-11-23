@@ -3,6 +3,24 @@ class MatrixError(Exception):
 
 class Matrix:
     count = 0
+    state = False
+    top = 0
+    left = 0
+
+    def set_top(self, num):
+        self.top = num
+    
+    def set_left(self, num):
+        self.left = num
+        
+    def move_down(self):
+        self.top+=1
+
+    def set_true(self):
+        self.state = True
+
+    def set_false(self):
+        self.state = False
 
     def get_count(self):
         return Matrix.count
