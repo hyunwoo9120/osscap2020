@@ -39,3 +39,21 @@ while True:
     for i in board:
         time.sleep(0.2)
         print(i)
+<<<<<<< HEAD
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======
+>>>>>>> 77592b6d07792c30ccf4c0eabf448321b075df45
