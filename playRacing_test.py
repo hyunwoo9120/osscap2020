@@ -1,10 +1,18 @@
 from matrix import *
 import random
+import pygame as pg
 import LED_display as LMD
 import threading
 import time
 import timeit
 import keyboard
+
+
+def play_sound(true):
+    if true:
+        pg.mixer.init()
+        race = pg.mixer.Sound("./snd/race.wav")
+        race.play()
 
 def LED_init():
     thread=threading.Thread(target=LMD.main, args=())
@@ -207,6 +215,7 @@ oScreen.paste(Matrix(tens),0,11)
 oScreen.paste(Matrix(ones),0,15)
 
 oScreen.paste(tempBlk, mytop, myleft)
+play_sound(True)
 LED_init()
 draw_matrix(oScreen)
 print()
@@ -324,6 +333,23 @@ while True:
     tempBlk.print()
 
     # TODO: 충돌처리!!
+    if(car1.state):
+        if currBlk.check_crash(mytop,myleft,car1Blk,car1.top,car1.left):
+            currBlk.print()
+            break
+    if(car2.state):
+        if currBlk.check_crash(mytop,myleft,car2Blk,car2.top,car2.left):
+            currBlk.print()
+            break
+    if(car3.state):
+        if currBlk.check_crash(mytop,myleft,car3Blk,car3.top,car3.left):
+            currBlk.print()
+            break
+    if(car4.state):
+        if currBlk.check_crash(mytop,myleft,car4Blk,car4.top,car4.left):
+            currBlk.print()
+            break
+    
 
     oScreen = Matrix(iScreen)
     oScreen.paste(Matrix(thnds),0,2)
