@@ -1,4 +1,5 @@
 from matrix import *
+from stringIO_test import *
 import random
 import pygame as pg
 import LED_display as LMD
@@ -7,12 +8,14 @@ import time
 import timeit
 import keyboard
 
-
-def play_sound(true):
-    if true:
-        pg.mixer.init()
+def play_sound(sound):
+    pg.mixer.init()
+    if sound == 'race':
         race = pg.mixer.Sound("./snd/race.wav")
         race.play()
+    elif sound == 'crash':
+        crash = pg.mixer.Sound("./snd/crash.wav")
+        crash.play()
 
 def LED_init():
     thread=threading.Thread(target=LMD.main, args=())
@@ -100,12 +103,6 @@ arrayMap = [
             [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
             [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
             [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
             [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
             [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
             [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
@@ -121,61 +118,17 @@ arrayMap = [
             [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
             [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
             [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2],
+            [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
+            [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
+            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+            
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
-
-zero = [[0, 7, 7, 7],
-        [0, 7, 0, 7],
-        [0, 7, 0, 7],
-        [0, 7, 0, 7],
-        [0, 7, 7, 7]]
-one = [[0, 0, 0, 7],
-       [0, 0, 7, 7],
-       [0, 0, 0, 7],
-       [0, 0, 0, 7],
-       [0, 0, 0, 7]]
-two = [[0, 7, 7, 7],
-       [0, 0, 0, 7],
-       [0, 7, 7, 7],
-       [0, 7, 0, 0],
-       [0, 7, 7, 7]]
-three = [[0, 7, 7, 7],
-         [0, 0, 0, 7],
-         [0, 7, 7, 7],
-         [0, 0, 0, 7],
-         [0, 7, 7, 7]]
-four = [[0, 7, 0, 7],
-        [0, 7, 0, 7],
-        [0, 7, 7, 7],
-        [0, 0, 0, 7],
-        [0, 0, 0, 7]]
-five = [[0, 7, 7, 7],
-        [0, 7, 0, 0],
-        [0, 7, 7, 7],
-        [0, 0, 0, 7],
-        [0, 7, 7, 7]]
-six = [[0, 7, 7, 7],
-       [0, 7, 0, 0],
-       [0, 7, 7, 7],
-       [0, 7, 0, 7],
-       [0, 7, 7, 7]]
-seven = [[0, 7, 7, 7],
-         [0, 7, 0, 7],
-         [0, 7, 0, 7],
-         [0, 0, 0, 7],
-         [0, 0, 0, 7]]
-eight = [[0, 7, 7, 7],
-         [0, 7, 0, 7],
-         [0, 7, 7, 7],
-         [0, 7, 0, 7],
-         [0, 7, 7, 7]]
-nine = [[0, 7, 7, 7],
-        [0, 7, 0, 7],
-        [0, 7, 7, 7],
-        [0, 0, 0, 7],
-        [0, 7, 7, 7]]
 
 ones = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 tens = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
@@ -215,14 +168,29 @@ oScreen.paste(Matrix(tens),0,11)
 oScreen.paste(Matrix(ones),0,15)
 
 oScreen.paste(tempBlk, mytop, myleft)
-play_sound(True)
+play_sound('race')
 LED_init()
 draw_matrix(oScreen)
 print()
 
+i=0
+j=0
+hp = 160
+hp_time = 0
 start = timeit.default_timer()
 check = 0
 while True:
+    i+=1
+    if(i%3==0):
+        if(j%6<2):
+            arrayMap.insert(7,[2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2])
+            del arrayMap[31]
+        else:
+            arrayMap.insert(7,[2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2])
+            del arrayMap[31]
+        j+=1
+        iScreen = Matrix(arrayMap)
+
     time.sleep(0.01)
     now = timeit.default_timer()
     score = round(now-start, 1)*10
@@ -334,22 +302,33 @@ while True:
 
     # TODO: 충돌처리!!
     if(car1.state):
-        if currBlk.check_crash(mytop,myleft,car1Blk,car1.top,car1.left):
-            currBlk.print()
+        if currBlk.check_crash(mytop,myleft,car1Blk,car1.top,car1.left) and now>hp_time+1:
+            hp_time = timeit.default_timer()
+            play_sound('crash')
+            hp -= 60
+        if(hp<=0):
             break
     if(car2.state):
-        if currBlk.check_crash(mytop,myleft,car2Blk,car2.top,car2.left):
-            currBlk.print()
+        if currBlk.check_crash(mytop,myleft,car2Blk,car2.top,car2.left) and now>hp_time+1:
+            hp_time = timeit.default_timer()
+            play_sound('crash')
+            hp -= 60
+        if(hp<=0):
             break
     if(car3.state):
-        if currBlk.check_crash(mytop,myleft,car3Blk,car3.top,car3.left):
-            currBlk.print()
+        if currBlk.check_crash(mytop,myleft,car3Blk,car3.top,car3.left) and now>hp_time+1:
+            hp_time = timeit.default_timer()
+            play_sound('crash')
+            hp -= 60
+        if(hp<=0):
             break
     if(car4.state):
-        if currBlk.check_crash(mytop,myleft,car4Blk,car4.top,car4.left):
-            currBlk.print()
+        if currBlk.check_crash(mytop,myleft,car4Blk,car4.top,car4.left) and now>hp_time+1:
+            hp_time = timeit.default_timer()
+            play_sound('crash')
+            hp -= 60
+        if(hp<=0):
             break
-    
 
     oScreen = Matrix(iScreen)
     oScreen.paste(Matrix(thnds),0,2)
