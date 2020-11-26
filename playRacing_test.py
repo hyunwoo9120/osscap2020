@@ -33,7 +33,7 @@ def draw_matrix(m):
             elif array[y][x] == 3:
                 LMD.set_pixel(y, 18-x, 4)
             elif array[y][x] ==  7:
-                LMD.set_pixel(y, 18-x, 1)
+                LMD.set_pixel(y, 18-x, 7)
             elif array[y][x] ==  8:
                 LMD.set_pixel(y, 18-x, 5)
             else:
