@@ -1,10 +1,5 @@
-
+import numpy as np
 # 문자열을 입력 받으면 배열로 출력
-
-
-char = []
-
-
 apb = {'A': [[0,7,7,7], [0,7,0,7], [0,7,7,7], [0,7,0,7], [0,7,0,7]],
        'B': [[0,7,7,0], [0,7,0,7], [0,7,7,7], [0,7,0,7], [0,7,7,0]],
        'C': [[0,7,7,7], [0,7,0,0], [0,7,0,0], [0,7,0,0], [0,7,7,7]],
@@ -23,10 +18,10 @@ apb = {'A': [[0,7,7,7], [0,7,0,7], [0,7,7,7], [0,7,0,7], [0,7,0,7]],
        'P': [[0,7,7,7], [0,7,0,7], [0,7,7,7], [0,7,0,0], [0,7,0,0]],
        'Q': [[0,7,7,7], [0,7,0,7], [0,7,7,7], [0,0,0,7], [0,0,0,7]],
        'R': [[0,7,7,7], [0,7,0,7], [0,7,7,0], [0,7,0,7], [0,7,0,7]],
-       'S': [[0,0,7,7], [0,7,0,0], [0,7,0,7], [0,0,0,7], [0,7,7,0]],
+       'S': [[0,0,7,7], [0,7,0,0], [0,7,7,7], [0,0,0,7], [0,7,7,0]],
        'T': [[0,7,7,7], [0,0,7,0], [0,0,7,0], [0,0,7,0], [0,0,7,0]],
        'U': [[0,7,0,7], [0,7,0,7], [0,7,0,7], [0,7,0,7], [0,7,7,7]],
-       'V': [[0,7,0,7], [0,7,0,7], [0,7,0,7], [0,0,7,0], [0,0,0,0]],
+       'V': [[0,7,0,7], [0,7,0,7], [0,7,0,7], [0,7,7,7], [0,0,7,0]],
        'W': [[0,7,0,7], [0,7,0,7], [0,7,7,7], [0,7,7,7], [0,7,0,7]],
        'X': [[0,7,0,7], [0,7,0,7], [0,0,7,0], [0,7,0,7], [0,7,0,7]],
        'Y': [[0,7,0,7], [0,7,0,7], [0,7,7,7], [0,0,0,7], [0,7,7,7]],
@@ -105,6 +100,7 @@ def trans(string, numary, apb, space):
     n = len(string)
     strlist = [ cn for cn in string]
     Olist = list()
+    
     for cd in strlist:
         if(cd.isdigit()==True):
             Olist.append(numary[int(cd)])
@@ -114,20 +110,44 @@ def trans(string, numary, apb, space):
             Olist.append(space)
         else:
             print("Error")
+    print(len(Olist))
     return Olist
 
+def change_str(Olist):
+    n = len(Olist)
+    if n<=4:
+        for i in range(4-n):
+            Olist.append(space)
+        return Olist
+    else :
+        # TODO: 앞뒤로 가로길이(16)만큼 여백 만들어서 slicing한 배열을 리턴하기
+        newList = list()
+        for i in range(4):
+            newList.append(space)
+        for j in range(n):
+            newList.append(Olist[j])
+        for k in range(4):
+            newList.append(space)
+        return newList
 
-lmd_str = trans(InputAndCheck(), numary, apb, space)
+def reshape_str(changed_str):
+    oneline = list()
+    for i in range(5):
+        for j in range(len(changed_str)):
+            oneline.extend(changed_str[j][i])
+    return np.reshape(oneline,(5,-1))
 
-for c in lmd_str:
-    print()
-    for y in range(len(c)):
-        print()
-        for x in range(len(c[y])):
-            if c[y][x] == 0:
-                print("□", end='')
-            elif c[y][x] == 7:
-                print("■", end='')
+
+# lmd_str = trans(InputAndCheck(), numary, apb, space)
+# for c in change_str(lmd_str):
+#     print()
+#     for y in range(len(c)):
+#         print()
+#         for x in range(len(c[y])):
+#             if c[y][x] == 0:
+#                 print("□", end='')
+#             elif c[y][x] == 7:
+#                 print("■", end='')
         
-print()
+# print()
 
