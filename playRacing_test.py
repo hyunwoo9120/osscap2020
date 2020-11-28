@@ -8,14 +8,15 @@ import time
 import timeit
 import keyboard
 
-def play_sound(sound):
-    pg.mixer.init()
-    if sound == 'race':
-        race = pg.mixer.Sound("./snd/race.wav")
-        race.play()
-    elif sound == 'crash':
-        crash = pg.mixer.Sound("./snd/crash.wav")
-        crash.play()
+def play_sound(sound, on):
+    if on:
+        pg.mixer.init()
+        if sound == 'race':
+            race = pg.mixer.Sound("./snd/race.wav")
+            race.play()
+        elif sound == 'crash':
+            crash = pg.mixer.Sound("./snd/crash.wav")
+            crash.play()
 
 def LED_init():
     thread=threading.Thread(target=LMD.main, args=())
@@ -78,304 +79,306 @@ def newcar_time(currTime):
     checkTime = currTime + randomTime
     return checkTime
 
-### integer variables: must always be integer!
-iScreenDy = 32
-iScreenDx = 16
-iScreenDw = 3
-mytop = 27
-myleft = iScreenDw + iScreenDx//2 - 2
-newCarNeeded = True
+def play(on):
+    ### integer variables: must always be integer!
+    iScreenDy = 32
+    iScreenDx = 16
+    iScreenDw = 3
+    mytop = 27
+    myleft = iScreenDw + iScreenDx//2 - 2
+    newCarNeeded = True
 
-arrayMap = [
-            #0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21
+    arrayMap = [
+                #0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21
 
-            # timer
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-            # gauge
-            [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3], 
-            [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3], 
-            # map
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2],
-            [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
-            
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+                # timer
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                # gauge
+                [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3], 
+                [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3], 
+                # map
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2],
+                [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                [2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2], 
+                
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
-ones = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-tens = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-hunds = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-thnds = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+    ones = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+    tens = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+    hunds = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+    thnds = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
-myCar = [[3, 3, 3],
-         [3, 3, 3],
-         [3, 3, 3],
-         [3, 3, 3]]
+    myCar = [[3, 3, 3],
+            [3, 3, 3],
+            [3, 3, 3],
+            [3, 3, 3]]
 
-obstCar = [[8, 8, 8],
-           [8, 8, 8],
-           [8, 8, 8],
-           [8, 8, 8]]
+    obstCar = [[8, 8, 8],
+            [8, 8, 8],
+            [8, 8, 8],
+            [8, 8, 8]]
 
-iScreen = Matrix(arrayMap)
-oScreen = Matrix(iScreen)
-
-currBlk = Matrix(myCar)
-tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
-tempBlk = tempBlk + currBlk
-
-car1 = Matrix(obstCar)
-car2 = Matrix(obstCar)
-car3 = Matrix(obstCar)
-car4 = Matrix(obstCar)
-
-ones = zero
-tens = zero
-hunds = zero
-thnds = zero
-
-oScreen.paste(Matrix(thnds),0,2)
-oScreen.paste(Matrix(hunds),0,6)
-oScreen.paste(Matrix(tens),0,11)
-oScreen.paste(Matrix(ones),0,15)
-
-oScreen.paste(tempBlk, mytop, myleft)
-play_sound('race')
-LED_init()
-draw_matrix(oScreen)
-print()
-
-i=0
-j=0
-hp = 160
-hp_time = 0
-start = timeit.default_timer()
-check = 0
-while True:
-    i+=1
-    if(i%3==0):
-        if(j%6<2):
-            arrayMap.insert(7,[2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2])
-            del arrayMap[31]
-        else:
-            arrayMap.insert(7,[2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2])
-            del arrayMap[31]
-        j+=1
-        iScreen = Matrix(arrayMap)
-
-    time.sleep(0.01)
-    now = timeit.default_timer()
-    score = round(now-start, 1)*10
-
-    thnds = num_matrix(int(score // 1000))
-    hunds = num_matrix(int((score - ((score // 1000)*1000)) // 100))
-    tens = num_matrix(int((score - ((score // 1000)*1000) - ((score - ((score // 1000)*1000)) // 100*100)) // 10))
-    ones = num_matrix(int(score % 10))
-
-    if(car1.state):
-        car1Blk = iScreen.clip(car1.top, car1.left, car1.top+car1.get_dy(), car1.left+car1.get_dx()) + car1
-        oScreen.paste(car1Blk, car1.top, car1.left)
-    if(car2.state):
-        car2Blk = iScreen.clip(car2.top, car2.left, car2.top+car2.get_dy(), car2.left+car2.get_dx()) + car2
-        oScreen.paste(car2Blk, car2.top, car2.left)
-    if(car3.state):
-        car3Blk = iScreen.clip(car3.top, car3.left, car3.top+car3.get_dy(), car3.left+car3.get_dx()) + car3
-        oScreen.paste(car3Blk, car3.top, car3.left)
-    if(car4.state):
-        car4Blk = iScreen.clip(car4.top, car4.left, car4.top+car4.get_dy(), car4.left+car4.get_dx()) + car4
-        oScreen.paste(car4Blk, car4.top, car4.left)
-
+    iScreen = Matrix(arrayMap)
     oScreen = Matrix(iScreen)
-    oScreen.paste(tempBlk, mytop, myleft)
-    if now > check:
-        newCarNeeded=True
-    else:
-        newCarNeeded=False
 
-    if newCarNeeded:
-        print("newCarNeeded")
-        check = newcar_time(now)
-        oScreen.paste(Matrix(thnds),0,2)
-        oScreen.paste(Matrix(hunds),0,6)
-        oScreen.paste(Matrix(tens),0,11)
-        oScreen.paste(Matrix(ones),0,15)
-        newCarNeeded = False
-        jScreen = Matrix(oScreen)
-        obstop = 7
-        obsleft = random_car()
-
-        currBlk = Matrix(myCar)
-        tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
-        tempBlk = tempBlk + currBlk
-
-        if(not car1.state):
-            car1.set_top(obstop)
-            car1.set_left(obsleft)
-            car1.set_true()
-            car1Blk = iScreen.clip(car1.top, car1.left, car1.top+car1.get_dy(), car1.left+car1.get_dx()) + car1
-        
-        elif(not car2.state):
-            car2.set_top(obstop)
-            car2.set_left(obsleft)
-            car2.set_true()
-            car2Blk = iScreen.clip(car2.top, car2.left, car2.top+car2.get_dy(), car2.left+car2.get_dx()) + car2
-        
-        elif(not car3.state):
-            car3.set_top(obstop)
-            car3.set_left(obsleft)
-            car3.set_true()
-            car3Blk = iScreen.clip(car3.top, car3.left, car3.top+car3.get_dy(), car3.left+car3.get_dx()) + car3
-
-        elif(not car4.state):
-            car4.set_top(obstop)
-            car4.set_left(obsleft)
-            car4.set_true()
-            car4Blk = iScreen.clip(car4.top, car4.left, car4.top+car4.get_dy(), car4.left+car4.get_dx()) + car4
-        
-        oScreen = Matrix(jScreen)
-        if(car1.state):
-            oScreen.paste(car1Blk, car1.top, car1.left)
-        if(car2.state):
-            oScreen.paste(car2Blk, car2.top, car2.left)
-        if(car3.state):
-            oScreen.paste(car3Blk, car3.top, car3.left)
-        if(car4.state):
-            oScreen.paste(car4Blk, car4.top, car4.left)
-    
-    if keyboard.is_pressed('q'):
-        key = 'q'
-        print('Game terminated...')
-        break
-    elif keyboard.is_pressed('a'):    # move left
-        key = 'a'
-        myleft -= 1
-    elif keyboard.is_pressed('d'):    # move right
-        key = 'd'
-        myleft += 1
-    else:
-        key = ' '
-
+    currBlk = Matrix(myCar)
     tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
     tempBlk = tempBlk + currBlk
 
-    if tempBlk.equal(5): # 양쪽 차선과 내 자동차가 부딪힌 경우
-        if key == 'a': # undo: move right
-            myleft += 1
-        elif key == 'd': # undo: move left
-            myleft -= 1
-    
-        tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
-        tempBlk = tempBlk + currBlk
-        oScreen.paste(tempBlk, mytop, myleft)
-    
-    tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
-    tempBlk = tempBlk + currBlk
-    tempBlk.print()
+    car1 = Matrix(obstCar)
+    car2 = Matrix(obstCar)
+    car3 = Matrix(obstCar)
+    car4 = Matrix(obstCar)
 
-    # TODO: 충돌처리!!
-    if(car1.state):
-        if currBlk.check_crash(mytop,myleft,car1Blk,car1.top,car1.left) and now>hp_time+1:
-            hp_time = timeit.default_timer()
-            play_sound('crash')
-            hp -= 60
-        if(hp<=0):
-            break
-    if(car2.state):
-        if currBlk.check_crash(mytop,myleft,car2Blk,car2.top,car2.left) and now>hp_time+1:
-            hp_time = timeit.default_timer()
-            play_sound('crash')
-            hp -= 60
-        if(hp<=0):
-            break
-    if(car3.state):
-        if currBlk.check_crash(mytop,myleft,car3Blk,car3.top,car3.left) and now>hp_time+1:
-            hp_time = timeit.default_timer()
-            play_sound('crash')
-            hp -= 60
-        if(hp<=0):
-            break
-    if(car4.state):
-        if currBlk.check_crash(mytop,myleft,car4Blk,car4.top,car4.left) and now>hp_time+1:
-            hp_time = timeit.default_timer()
-            play_sound('crash')
-            hp -= 60
-        if(hp<=0):
-            break
+    ones = zero
+    tens = zero
+    hunds = zero
+    thnds = zero
 
-    oScreen = Matrix(iScreen)
     oScreen.paste(Matrix(thnds),0,2)
     oScreen.paste(Matrix(hunds),0,6)
     oScreen.paste(Matrix(tens),0,11)
     oScreen.paste(Matrix(ones),0,15)
+
     oScreen.paste(tempBlk, mytop, myleft)
-
-    if(car1.state):
-        if car1.top<32:
-            car1.top+=1
-        else:
-            car1.set_false()
-    if(car2.state):
-        if car2.top<32:
-            car2.top+=1
-        else:
-            car2.set_false()
-    if(car3.state):
-        if car3.top<32:
-            car3.top+=1
-        else:
-            car3.set_false()
-    if(car4.state):
-        if car4.top<32:
-            car4.top+=1
-        else:
-            car4.set_false()
-
-    if(car1.state):
-            oScreen.paste(car1Blk, car1.top, car1.left)
-    if(car2.state):
-            oScreen.paste(car2Blk, car2.top, car2.left)
-    if(car3.state):
-            oScreen.paste(car3Blk, car3.top, car3.left)
-    if(car4.state):
-            oScreen.paste(car4Blk, car4.top, car4.left)
+    play_sound('race', on)
+    LED_init()
     draw_matrix(oScreen)
+    print()
 
-    # 호옥시라도 점수가 9999가 된다면....
-    if(score == 9999):
-        print("!! You WIN !!")
-        break
+    i=0
+    j=0
+    hp = 160
+    hp_time = 0
+    start = timeit.default_timer()
+    check = 0
+    while True:
+        i+=1
+        if(i%3==0):
+            if(j%6<2):
+                arrayMap.insert(7,[2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2])
+                del arrayMap[31]
+            else:
+                arrayMap.insert(7,[2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2])
+                del arrayMap[31]
+            j+=1
+            iScreen = Matrix(arrayMap)
 
-    
-    
+        time.sleep(0.01)
+        now = timeit.default_timer()
+        score = round(now-start, 1)*10
+
+        thnds = num_matrix(int(score // 1000))
+        hunds = num_matrix(int((score - ((score // 1000)*1000)) // 100))
+        tens = num_matrix(int((score - ((score // 1000)*1000) - ((score - ((score // 1000)*1000)) // 100*100)) // 10))
+        ones = num_matrix(int(score % 10))
+
+        if(car1.state):
+            car1Blk = iScreen.clip(car1.top, car1.left, car1.top+car1.get_dy(), car1.left+car1.get_dx()) + car1
+            oScreen.paste(car1Blk, car1.top, car1.left)
+        if(car2.state):
+            car2Blk = iScreen.clip(car2.top, car2.left, car2.top+car2.get_dy(), car2.left+car2.get_dx()) + car2
+            oScreen.paste(car2Blk, car2.top, car2.left)
+        if(car3.state):
+            car3Blk = iScreen.clip(car3.top, car3.left, car3.top+car3.get_dy(), car3.left+car3.get_dx()) + car3
+            oScreen.paste(car3Blk, car3.top, car3.left)
+        if(car4.state):
+            car4Blk = iScreen.clip(car4.top, car4.left, car4.top+car4.get_dy(), car4.left+car4.get_dx()) + car4
+            oScreen.paste(car4Blk, car4.top, car4.left)
+
+        oScreen = Matrix(iScreen)
+        oScreen.paste(tempBlk, mytop, myleft)
+        if now > check:
+            newCarNeeded=True
+        else:
+            newCarNeeded=False
+
+        if newCarNeeded:
+            print("newCarNeeded")
+            check = newcar_time(now)
+            oScreen.paste(Matrix(thnds),0,2)
+            oScreen.paste(Matrix(hunds),0,6)
+            oScreen.paste(Matrix(tens),0,11)
+            oScreen.paste(Matrix(ones),0,15)
+            newCarNeeded = False
+            jScreen = Matrix(oScreen)
+            obstop = 7
+            obsleft = random_car()
+
+            currBlk = Matrix(myCar)
+            tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
+            tempBlk = tempBlk + currBlk
+
+            if(not car1.state):
+                car1.set_top(obstop)
+                car1.set_left(obsleft)
+                car1.set_true()
+                car1Blk = iScreen.clip(car1.top, car1.left, car1.top+car1.get_dy(), car1.left+car1.get_dx()) + car1
+            
+            elif(not car2.state):
+                car2.set_top(obstop)
+                car2.set_left(obsleft)
+                car2.set_true()
+                car2Blk = iScreen.clip(car2.top, car2.left, car2.top+car2.get_dy(), car2.left+car2.get_dx()) + car2
+            
+            elif(not car3.state):
+                car3.set_top(obstop)
+                car3.set_left(obsleft)
+                car3.set_true()
+                car3Blk = iScreen.clip(car3.top, car3.left, car3.top+car3.get_dy(), car3.left+car3.get_dx()) + car3
+
+            elif(not car4.state):
+                car4.set_top(obstop)
+                car4.set_left(obsleft)
+                car4.set_true()
+                car4Blk = iScreen.clip(car4.top, car4.left, car4.top+car4.get_dy(), car4.left+car4.get_dx()) + car4
+            
+            oScreen = Matrix(jScreen)
+            if(car1.state):
+                oScreen.paste(car1Blk, car1.top, car1.left)
+            if(car2.state):
+                oScreen.paste(car2Blk, car2.top, car2.left)
+            if(car3.state):
+                oScreen.paste(car3Blk, car3.top, car3.left)
+            if(car4.state):
+                oScreen.paste(car4Blk, car4.top, car4.left)
         
-###
-### end of the loop
-###
+        if keyboard.is_pressed('q'):
+            key = 'q'
+            print('Game terminated...')
+            break
+        elif keyboard.is_pressed('a'):    # move left
+            key = 'a'
+            myleft -= 1
+        elif keyboard.is_pressed('d'):    # move right
+            key = 'd'
+            myleft += 1
+        else:
+            key = ' '
+
+        tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
+        tempBlk = tempBlk + currBlk
+
+        if tempBlk.equal(5): # 양쪽 차선과 내 자동차가 부딪힌 경우
+            if key == 'a': # undo: move right
+                myleft += 1
+            elif key == 'd': # undo: move left
+                myleft -= 1
+        
+            tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
+            tempBlk = tempBlk + currBlk
+            oScreen.paste(tempBlk, mytop, myleft)
+        
+        tempBlk = iScreen.clip(mytop, myleft, mytop+currBlk.get_dy(), myleft+currBlk.get_dx())
+        tempBlk = tempBlk + currBlk
+        tempBlk.print()
+
+        # TODO: 충돌처리!!
+        if(car1.state):
+            if currBlk.check_crash(mytop,myleft,car1Blk,car1.top,car1.left) and now>hp_time+1:
+                hp_time = timeit.default_timer()
+                play_sound('crash', on)
+                hp -= 60
+            if(hp<=0):
+                break
+        if(car2.state):
+            if currBlk.check_crash(mytop,myleft,car2Blk,car2.top,car2.left) and now>hp_time+1:
+                hp_time = timeit.default_timer()
+                play_sound('crash', on)
+                hp -= 60
+            if(hp<=0):
+                break
+        if(car3.state):
+            if currBlk.check_crash(mytop,myleft,car3Blk,car3.top,car3.left) and now>hp_time+1:
+                hp_time = timeit.default_timer()
+                play_sound('crash', on)
+                hp -= 60
+            if(hp<=0):
+                break
+        if(car4.state):
+            if currBlk.check_crash(mytop,myleft,car4Blk,car4.top,car4.left) and now>hp_time+1:
+                hp_time = timeit.default_timer()
+                play_sound('crash', on)
+                hp -= 60
+            if(hp<=0):
+                break
+
+        oScreen = Matrix(iScreen)
+        oScreen.paste(Matrix(thnds),0,2)
+        oScreen.paste(Matrix(hunds),0,6)
+        oScreen.paste(Matrix(tens),0,11)
+        oScreen.paste(Matrix(ones),0,15)
+        oScreen.paste(tempBlk, mytop, myleft)
+
+        if(car1.state):
+            if car1.top<32:
+                car1.top+=1
+            else:
+                car1.set_false()
+        if(car2.state):
+            if car2.top<32:
+                car2.top+=1
+            else:
+                car2.set_false()
+        if(car3.state):
+            if car3.top<32:
+                car3.top+=1
+            else:
+                car3.set_false()
+        if(car4.state):
+            if car4.top<32:
+                car4.top+=1
+            else:
+                car4.set_false()
+
+        if(car1.state):
+                oScreen.paste(car1Blk, car1.top, car1.left)
+        if(car2.state):
+                oScreen.paste(car2Blk, car2.top, car2.left)
+        if(car3.state):
+                oScreen.paste(car3Blk, car3.top, car3.left)
+        if(car4.state):
+                oScreen.paste(car4Blk, car4.top, car4.left)
+        draw_matrix(oScreen)
+
+        # 호옥시라도 점수가 9999가 된다면....
+        if(score == 9999):
+            print("!! You WIN !!")
+            break
+    pg.mixer.pause()
+    return score
+        
+        
+            
+    ###
+    ### end of the loop
+    ###
