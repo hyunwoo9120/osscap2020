@@ -99,12 +99,10 @@ def start():
             if on:
                 print("on: ", on)
                 iScreen.paste(Matrix(sound_on),26,0)
-                # race.play()
                 pg.mixer.unpause()
             else:
                 print("off: ", on)
                 iScreen.paste(Matrix(sound_off),26,0)
-                # pg.mixer.fadeout(500)
                 pg.mixer.pause()
 
         if keyboard.is_pressed('\n'):
@@ -115,8 +113,6 @@ def start():
         draw_matrix(iScreen)
         LMD.refresh()
 
-    userName = input("Input your name: ")
-    print("user name: ", userName)
     if on:
-        pg.mixer.pause()
-    return userName, on
+        race.stop()
+    return on

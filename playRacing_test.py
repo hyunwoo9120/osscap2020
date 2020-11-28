@@ -8,15 +8,19 @@ import time
 import timeit
 import keyboard
 
+pg.mixer.init()
+race = pg.mixer.Sound("./snd/race.wav")
+crash = pg.mixer.Sound("./snd/crash.wav")
+
 def play_sound(sound, on):
     if on:
-        pg.mixer.init()
         if sound == 'race':
-            race = pg.mixer.Sound("./snd/race.wav")
             race.play()
         elif sound == 'crash':
-            crash = pg.mixer.Sound("./snd/crash.wav")
             crash.play()
+        elif sound == 'stop':
+            print("called stop")
+            race.stop()
 
 def LED_init():
     thread=threading.Thread(target=LMD.main, args=())
@@ -374,7 +378,8 @@ def play(on):
         if(score == 9999):
             print("!! You WIN !!")
             break
-    pg.mixer.pause()
+
+    play_sound('stop',on)
     return score
         
         

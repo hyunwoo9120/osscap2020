@@ -1,6 +1,8 @@
 import start_ui
 import playRacing_test
 import gameOver_ui
+import keyboard
+import time
 while True:
 
     
@@ -25,3 +27,9 @@ while True:
         # 인자로 받은 이름과 score, ranking을 화면에 출력
         # 엔터 입력 시 시작화면으로 돌아가기
         # q 입력 시 루틴을 끝내고 종료
+    if keyboard.is_pressed('\n'):
+        time.sleep(1)
+        continue
+    
+    if keyboard.is_pressed('q'):
+        print("____________terminated____________")
