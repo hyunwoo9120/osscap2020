@@ -3,6 +3,24 @@ class MatrixError(Exception):
 
 class Matrix:
     count = 0
+    state = False
+    top = 0
+    left = 0
+
+    def set_top(self, num):
+        self.top = num
+    
+    def set_left(self, num):
+        self.left = num
+        
+    def move_down(self):
+        self.top+=1
+
+    def set_true(self):
+        self.state = True
+
+    def set_false(self):
+        self.state = False
 
     def get_count(self):
         return Matrix.count
@@ -22,7 +40,9 @@ class Matrix:
         self._dy = cy
         self._dx = cx
         self._array = [[0]*self._dx for i in range(self._dy)]
-        
+
+
+     
     def __init__(self, arg):
         Matrix.count += 1
         if isinstance(arg, list):
@@ -49,7 +69,7 @@ class Matrix:
 
     def __str__(self):
         return 'Matrix(%d, %d)' % (self._dy, self._dx)
-
+    
     def print(self):
         print('[', end=' ')
         for y in range(self._dy-1):
@@ -121,5 +141,18 @@ class Matrix:
             if len(temp) > 0:
                 return True
         return False
+    
+    def check_crash(self, mytop, myleft, obstBlk, obstop, obsleft):
+       # print("\nmytop:{} myleft: {}\nself._dx:{} self._dy:{}\nobstBlk._dx:{}obstBlk._dy:{}\nobsleft:{} obstop:{}\n".format(mytop,myleft,self._dx,self._dy,obstBlk._dx,obstBlk._dy,obsleft,obstop))
+        if (myleft + self._dx > obsleft) and (obsleft + obstBlk._dx > myleft) and (mytop <= obstop + obstBlk._dy) and (mytop + self._dy >= obstop):
+            return True
+        else:
+            return False
 
-
+    def minusHp(self,cnt,hp1,hp2,hp3,oScreen):
+        if(cnt==1):
+            return oScreen.clip(hp1.top,hp1.left,hp3.top+hp3.get_dy(), hp3.left+hp3.get_dx())
+        if(cnt==2):
+            return oScreen.clip(hp1.top,hp1.left,hp2.top+hp2.get_dy(), hp2.left+hp2.get_dx())
+        if(cnt==3):
+            return oScreen.clip(hp1.top,hp1.left,hp1.top+hp1.get_dy(), hp1.left+hp1.get_dx())
