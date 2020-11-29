@@ -11,6 +11,7 @@ pg.mixer.init()
 race = pg.mixer.Sound("./snd/race.wav")
 crash = pg.mixer.Sound("./snd/crash.wav")
 heal = pg.mixer.Sound("./snd/item.wav")
+destruct = pg.mixer.Sound("./snd/destruct.wav")
 
 def play_sound(sound, on):
     if on:
@@ -20,6 +21,8 @@ def play_sound(sound, on):
             crash.play()
         elif sound == 'heal':
             heal.play()
+        elif sound == 'destruct':
+            destruct.play()
         elif sound == 'stop':
             print("called stop")
             race.stop()
@@ -282,7 +285,6 @@ def play(on):
             newCarNeeded=False
 
         if newCarNeeded:
-            print("newCarNeeded")
             check = newcar_time(now)
             oScreen.paste(Matrix(thnds),0,3)
             oScreen.paste(Matrix(hunds),0,7)
@@ -344,6 +346,12 @@ def play(on):
             itemleft = random_car()
             item.set_top(itemtop)
             item.set_left(itemleft)
+
+            itemtype = random.randrange(2)
+            if itemtype == 0:
+                item.set_item("heal")
+            elif itemtype == 1:
+                item.set_item("destruct")
 
             itemBlk = iScreen.clip(item.top, item.left, item.top+item.get_dy(), item.left+item.get_dx()) + item
             if(item.state):
@@ -449,14 +457,27 @@ def play(on):
         if(item.state):
             if currBlk.check_crash(mytop,myleft,itemBlk,item.top,item.left) and now>hp_time+1:
                 hp_time = timeit.default_timer()
-                play_sound('heal', on)
-                hp += 40
-                if hp >160:
-                    hp = 160
-                print("hp: ",hp)
-                for i in range(hp//10):
-                    gauge[0][15-i]=1
-                    gauge[1][15-i]=1
+                if item.kind == "heal":
+                    play_sound('heal', on)
+                    hp += 40
+                    if hp >160:
+                        hp = 160
+                    print("hp: ",hp)
+                    for i in range(hp//10):
+                        gauge[0][15-i]=1
+                        gauge[1][15-i]=1
+                elif item.kind == "destruct":
+                    play_sound('destruct', on)
+                    car1.set_false()
+                    car1.set_top(32)
+                    car2.set_false()
+                    car2.set_top(32)
+                    car3.set_false()
+                    car3.set_top(32)
+                    car4.set_false()
+                    car4.set_top(32)
+
+
 
         if(hp<50):
             for i in range(len(gauge)):

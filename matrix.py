@@ -6,6 +6,10 @@ class Matrix:
     state = False
     top = 0
     left = 0
+    kind = ""
+    
+    def set_item(self, itemtype):
+        self.kind = itemtype
 
     def set_top(self, num):
         self.top = num
