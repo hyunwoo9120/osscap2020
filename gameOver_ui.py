@@ -30,6 +30,7 @@ def num_matrix(number, size):
             return eight
         elif number == 9:
             return nine
+            
     elif size == "big":
         if number == 0:
             return bigZero
