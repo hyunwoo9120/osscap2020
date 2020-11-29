@@ -125,8 +125,7 @@ def your_rank(nickname, ranked_score_board):
     for i in range(len(ranked_score_board)):
         if ranked_score_board[i][0] == nickname:
             return len(ranked_score_board)-i    #player's rank
-        else:
-            print("Does not found")
+
 
 def InputAndCheck():
     while(1):
@@ -189,9 +188,9 @@ def reshape_str(changed_str):
 # 게임이 끝난 후 점수는 그대로 받고, 닉넴임은 그 이후 입력 받음.
 # 그 후 플레이어 이름과 랭킹을 보여주고 게임 시작화면에서는 높은 순위만을 보여줌.
 
-score = # 게임 점수 받기
-nickname = InputAndCheck()
+score = 3000
 initial()
+nickname = InputAndCheck()
 new_board = load_data()
 save_score(new_board, nickname, score)
 ranked_score_board = rank_score(load_data())
@@ -200,14 +199,14 @@ y_rank = your_rank(nickname, ranked_score_board)
 
 
 #플레이어 랭킹
-p_rank = reshape_str(change_str(trans(y_rank, numary, apb, apace)))
-player = reshape_str(change_str(trans(nickname, numary, apb, apace)))
+p_rank = reshape_str(change_str(trans(str(y_rank), numary, apb, space)))
+player = reshape_str(change_str(trans(str(nickname), numary, apb, space)))
 # p_rank는 플레이어의 순위, player는 플레이어의 닉넴임을 배열화함.
 
 
 
 #높은 랭킹 3순위
-hr_s = [[0, 0],[0, 0],[0, 0]]
+hr_arr = [[0, 0],[0, 0],[0, 0]]
 
 for i in range(len(high_rank)):
     for k in range(2):
