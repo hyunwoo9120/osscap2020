@@ -28,7 +28,7 @@ def LED_init():
     thread.start()
     return
 
-def draw_matrix(m):
+def draw_matrix(m, object):
     array = m.get_array()
     for y in range(m.get_dy()-4):
         for x in range(3, m.get_dx()-3):

@@ -147,5 +147,10 @@ class Matrix:
         else:
             return False
    
-
+    def check_item(self, mytop, myleft, obstBlk, obstop, obsleft):
+       # print("\nmytop:{} myleft: {}\nself._dx:{} self._dy:{}\nobstBlk._dx:{}obstBlk._dy:{}\nobsleft:{} obstop:{}\n".format(mytop,myleft,self._dx,self._dy,obstBlk._dx,obstBlk._dy,obsleft,obstop))
+        if (myleft + self._dx > obsleft) and (obsleft + obstBlk._dx > myleft) and (mytop <= obstop + obstBlk._dy) and (mytop + self._dy >= obstop):
+            return True
+        else:
+            return False
 
