@@ -162,5 +162,6 @@ def end(name, score):
         LMD.refresh()
 
         if keyboard.is_pressed('\n'):
-            time.sleep(0.3)
-            break    
+            return "again"
+        if keyboard.is_pressed('q'):
+            return "quit"

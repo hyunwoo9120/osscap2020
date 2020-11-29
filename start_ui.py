@@ -112,7 +112,8 @@ def start():
 
         draw_matrix(iScreen)
         LMD.refresh()
-
+    clear = input()
+    username = input("사용자의 이름을 입력하세요: ")
     if on:
         race.stop()
-    return on
+    return username, on
