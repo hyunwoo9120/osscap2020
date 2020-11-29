@@ -8,27 +8,49 @@ import time
 import timeit
 import keyboard
 
-def num_matrix(number):
-    if number == 0:
-        return zero
-    elif number == 1:
-        return one
-    elif number == 2:
-        return two
-    elif number == 3:
-        return three
-    elif number == 4:
-        return four
-    elif number == 5:
-        return five
-    elif number == 6:
-        return six
-    elif number == 7:
-        return seven
-    elif number == 8:
-        return eight
-    elif number == 9:
-        return nine
+def num_matrix(number, size):
+    if size == "small":
+        if number == 0:
+            return zero
+        elif number == 1:
+            return one
+        elif number == 2:
+            return two
+        elif number == 3:
+            return three
+        elif number == 4:
+            return four
+        elif number == 5:
+            return five
+        elif number == 6:
+            return six
+        elif number == 7:
+            return seven
+        elif number == 8:
+            return eight
+        elif number == 9:
+            return nine
+    elif size == "big":
+        if number == 0:
+            return bigZero
+        elif number == 1:
+            return bigOne
+        elif number == 2:
+            return bigTwo
+        elif number == 3:
+            return bigThree
+        elif number == 4:
+            return bigFour
+        elif number == 5:
+            return bigFive
+        elif number == 6:
+            return bigSix
+        elif number == 7:
+            return bigSeven
+        elif number == 8:
+            return bigEight
+        elif number == 9:
+            return bigNine
 
 def input_score():
     scoreInput = input("점수를 입력하세요: ")
@@ -61,13 +83,13 @@ tens = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 hunds = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 thnds = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
-def draw_score(score):
-    thnds = num_matrix(int(score // 1000))
-    hunds = num_matrix(int((score - ((score // 1000)*1000)) // 100))
-    tens = num_matrix(int((score - ((score // 1000)*1000) - ((score - ((score // 1000)*1000)) // 100*100)) // 10))
-    ones = num_matrix(int(score % 10))
+# def draw_score(score):
+#     thnds = num_matrix(int(score // 1000), "small")
+#     hunds = num_matrix(int((score - ((score // 1000)*1000)) // 100), "small")
+#     tens = num_matrix(int((score - ((score // 1000)*1000) - ((score - ((score // 1000)*1000)) // 100*100)) // 10), "small")
+#     ones = num_matrix(int(score % 10), "small")
 
-def end(name, score):
+def end(name, score, rank):
     arrayStart=[#0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 # print user name
@@ -81,17 +103,17 @@ def end(name, score):
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                # Rank (font size: 5x9)
-                [0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0],
-                [0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 7, 7, 0, 0, 0],
-                [0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 0, 7, 0, 0, 0],
-                [0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 0, 7, 0, 0, 0],
-                [0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 0, 7, 0, 0, 0],
-                [0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 0, 7, 0, 0, 0],
-                [0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 0, 7, 0, 0, 0],
-                [0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 0, 7, 0, 0, 0],
-                [0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                # Rank (font size: 5x7)
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 # blank
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 # home icon
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
@@ -118,15 +140,17 @@ def end(name, score):
     userName = change_str(lmd_str)
     userName = reshape_str(userName)
 
-    thnds = num_matrix(int(score // 1000))
-    hunds = num_matrix(int((score - ((score // 1000)*1000)) // 100))
-    tens = num_matrix(int((score - ((score // 1000)*1000) - ((score - ((score // 1000)*1000)) // 100*100)) // 10))
-    ones = num_matrix(int(score % 10))
-
     i=0
     j=0
     n = len(lmd_str)
     while True:
+        thnds = num_matrix(int(score // 1000), "small")
+        hunds = num_matrix(int((score - ((score // 1000)*1000)) // 100), "small")
+        tens = num_matrix(int((score - ((score // 1000)*1000) - ((score - ((score // 1000)*1000)) // 100*100)) // 10), "small")
+        ones = num_matrix(int(score % 10), "small")
+
+        rankTens = num_matrix(int(rank // 10), "big")
+        rankOnes = num_matrix(int(rank % 10), "big")
 
         if len(lmd_str)<=4:
             char1 = userName[:,0:4]
@@ -157,8 +181,10 @@ def end(name, score):
         iScreen.paste(Matrix(tens),26,8)
         iScreen.paste(Matrix(ones),26,12)
 
+        iScreen.paste(Matrix(rankTens),11,2)
+        iScreen.paste(Matrix(rankOnes),11,9)
+
         draw_matrix(iScreen)
-        draw_score(score)
         LMD.refresh()
 
         if keyboard.is_pressed('\n'):

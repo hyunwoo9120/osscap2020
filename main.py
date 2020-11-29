@@ -36,7 +36,7 @@ while True:
         # 엔터 입력 시 시작화면으로 돌아가기
         # q 입력 시 루틴을 끝내고 종료
 
-    result = gameOver_ui.end(username, score)
+    result = gameOver_ui.end(username, score, 67)
     if result == "again":
         continue
     if result=="quit":
