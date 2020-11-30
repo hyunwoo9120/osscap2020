@@ -32,7 +32,7 @@ while True:
         # 엔터 입력 시 사용자의 이름 입력받기
         # 입력받은 사용자의 이름을 저장
     
-    username, sound_on = start_ui.start(rank1, rank2, rank3)
+    username, sound_on = start.start(rank1, rank2, rank3)
     username = username.upper()
     
     # 게임 시작
@@ -40,7 +40,7 @@ while True:
         # 게임 진행
         # HP가 0 이하인 경우 게임을 종료
         # 종료 시 score를 리턴
-    score = playRacing_test.play(sound_on)
+    score = playRacing.play(sound_on)
     ranking.save_score(new_board, username, score)
     ranked_score_board = ranking.rank_score(ranking.load_data())
     rank = ranking.your_rank(username, ranked_score_board)
@@ -54,7 +54,7 @@ while True:
         # 엔터 입력 시 시작화면으로 돌아가기
         # q 입력 시 루틴을 끝내고 종료
 
-    result = gameOver_ui.end(username, score, rank)
+    result = gameOver.end(username, score, rank)
 
 
     if result == "again":
