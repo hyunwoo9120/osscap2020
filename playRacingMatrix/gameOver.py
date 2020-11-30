@@ -1,5 +1,5 @@
 from matrix import *
-from stringIO_test import *
+from stringIO import *
 import pygame as pg
 import random
 import LED_display as LMD

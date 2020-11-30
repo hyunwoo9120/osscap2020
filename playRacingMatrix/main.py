@@ -1,6 +1,6 @@
-import start_ui
-import playRacing_test
-import gameOver_ui
+import start
+import playRacing
+import gameOver
 import ranking
 import keyboard
 import time
