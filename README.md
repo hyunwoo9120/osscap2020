@@ -1,4 +1,4 @@
-# osscap2020
+# osscap2020 Racing Matrix
 
 ## 2020 오픈소스기초설계 프로젝트
 
