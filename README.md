@@ -4,6 +4,7 @@
 
 
 [![Racing Matrix Demo youtube video](http://img.youtube.com/vi/LtkLSl5j5KM/0.jpg)](http://www.youtube.com/watch?v=LtkLSl5j5KM "Racing Matrix")
+<- click
 
 
 ### [Racing Matrix]
