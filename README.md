@@ -2,8 +2,11 @@
 
 ## 2020 오픈소스기초설계 프로젝트
 
-### [Racing Matrix]
 
+[![Racing Matrix Demo youtube video](http://img.youtube.com/vi/LtkLSl5j5KM/0.jpg)](http://www.youtube.com/watch?v=LtkLSl5j5KM "Racing Matrix")
+
+
+### [Racing Matrix]
 라즈베리파이와 led matrix, pygame 등의 모듈을 이용하여 레이싱게임을 구현하였다.<br>
 플레이어가 장애물을 피한다는 설정과 더불어 장애물을 제거하는 destruct 아이템, HP를 회복하는 heal 아이템을 구현했다.<br>
 각 게임 진행상황에 따른 BGM과 효과음을 두어 기존의 레이싱 게임에서 차별성을 두었다.<br>
